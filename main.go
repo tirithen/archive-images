@@ -58,6 +58,13 @@ func (mediaFile *MediaFile) LoadMetaData() error {
 		}
 	}
 
+	// Use modified date from file
+	fileStats, err := os.Stat(mediaFile.Path)
+	if err == nil {
+		mediaFile.CreatedAt = fileStats.ModTime()
+		return nil
+	}
+
 	return errors.New("Failed to load required meta data from " + mediaFile.Path)
 }
 
@@ -71,7 +78,7 @@ func (mediaFile *MediaFile) CreatedDate() string {
 
 func (mediaFile *MediaFile) HasMediaFileExtension() bool {
 	// TODO: improve and extend this list (or find some other way)
-	mediaFileExtensions := []string{".tiff", ".png", ".jpg", ".jpeg", ".mp4", ".avi", ".mov"}
+	mediaFileExtensions := []string{".tiff", ".png", ".jpg", ".jpeg", ".mp4", ".avi", ".mov", ".3gp"}
 	result := false
 
 	for _, extension := range mediaFileExtensions {
